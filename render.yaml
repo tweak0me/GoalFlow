@@ -1,0 +1,68 @@
+# =================================================================
+# Render Blueprint Specification (render.yaml)
+# Project: GoalFlow AI - Goal-Driven Task Prioritization & Scheduling
+# =================================================================
+
+# Настройка Preview-окружений для Pull Request'ов
+previews:
+  generation: automatic # Автоматическое создание превью для PR
+
+# Список сервисов приложения
+services:
+  # Основной Full-Stack Web-сервис (Node.js + Express + Vite React)
+  - type: web
+    name: goalflow-ai
+    runtime: node
+    plan: free # Доступные планы: free, starter, standard, etc.
+    region: frankfurt # Доступные регионы: frankfurt, oregon, ohio, singapore
+    branch: main # Основная ветка репозитория
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    healthCheckPath: /api/ai/status
+    autoDeployTrigger: 'commit' # Автоматический деплой при push в ветку
+    
+    # Переменные окружения
+    envVars:
+      # Системные параметры Node.js
+      - key: NODE_ENV
+        value: production
+      
+      # Порт, на котором сервер ожидает подключения
+      - key: PORT
+        value: 3000
+      
+      # API ключ Gemini (sync: false открывает запрос ввода ключа в панели Render)
+      - key: GEMINI_API_KEY
+        sync: false
+      
+      # API ключ DeepSeek Reasoner (опционально для R1 reasoning)
+      - key: DEEPSEEK_API_KEY
+        sync: false
+
+# -----------------------------------------------------------------
+# Примеры дополнительных конфигураций (при необходимости раскомментируйте):
+# -----------------------------------------------------------------
+
+  # Вариант: Static Site (если проект компилируется в чисто клиентский SPA без Node-сервера)
+  # - type: web
+  #   name: goalflow-ai-static
+  #   runtime: static
+  #   buildCommand: npm install && npm run build
+  #   staticPublishPath: ./dist
+  #   headers:
+  #     - path: /*
+  #       name: X-Frame-Options
+  #       value: sameorigin
+  #   routes:
+  #     # SPA fallback rewrite: все пути направляются в index.html
+  #     - type: rewrite
+  #       source: /*
+  #       destination: /index.html
+
+  # Пример: Redis / Key-Value хранилище (для кеширования AI рассуждений или очереди)
+  # - type: keyvalue
+  #   name: goalflow-cache
+  #   plan: free
+  #   ipAllowList:
+  #     - source: 0.0.0.0/0
+  #       description: all-access
