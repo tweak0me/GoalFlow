@@ -1,0 +1,7 @@
+{
+  "name": "GoalFlow AI - Умный Планировщик Задач",
+  "description": "Автоматическое распределение задач и расчет значимости на основе целей с интеграцией календаря и ИИ-приоритизацией в реальном времени",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
